@@ -18,13 +18,13 @@
         <b-nav-item href="#" right>
           <router-link to="/">Home</router-link>
         </b-nav-item>
-        <b-nav-item href="#" right v-if="!logued">
+        <b-nav-item href="#" right v-if="!store.logged">
           <router-link to="/login" >Login</router-link>
         </b-nav-item>
         <b-nav-item href="#" right v-else @click="logout()" >
           <router-link to="" >Logout</router-link>
         </b-nav-item>
-        <b-nav-item href="#" right v-if="!logued">
+        <b-nav-item href="#" right v-if="!store.logged">
           <router-link to="/register">Register</router-link>
         </b-nav-item>
       </b-navbar-nav>
@@ -33,21 +33,24 @@
 </template>
 
 <script>
+import { store } from "@/global/store.js"
 export default {
   data(){
     return {
-      logued: false
+      store
     }
   },
   methods:{
     logout(){
       localStorage.removeItem("token")
-      this.logued = false
-      this.$router.push('/')
+      store.logged = false
+      if(this.$router.history.current.path !== '/'){
+        this.$router.push('/')
+      }
     }
   },
   mounted(){
-    this.logued = localStorage.getItem("token") ? true : false
+    store.logged = localStorage.getItem("token") ? true : false
   }
 };
 </script>

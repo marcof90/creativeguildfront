@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import { store } from "@/global/store.js"
 import authService from "@/services/auth.service";
 
 export default {
@@ -66,8 +67,13 @@ export default {
       authService
         .login(this.form)
         .then((res) => {
-          localStorage.setItem("token", res.token);
-          this.$router.push("/");
+          console.log(res)
+          if(Object.hasOwn(res, 'token')) {
+            localStorage.setItem("token", res.token);
+            store.logged = true;
+            this.$router.push("/");
+          }
+
         })
         .catch((err) => console.log(err));
     },
